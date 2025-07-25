@@ -18,4 +18,4 @@ public interface UserService {
     int getAvailablePoints(Long userId);
     boolean isAdmin(Long userId);
     MemberType getMemberType(Long userId);
-} 
+}
