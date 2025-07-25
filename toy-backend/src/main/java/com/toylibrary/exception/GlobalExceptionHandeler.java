@@ -26,5 +26,13 @@ public class GlobalExceptionHandeler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(MemberTypeNotApplicableException.class)
+        public ResponseEntity<Object> handleMemberTypeNotApplicable(MemberTypeNotApplicableException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    
+
+
 
 }
