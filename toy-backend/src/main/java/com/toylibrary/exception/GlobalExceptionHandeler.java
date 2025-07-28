@@ -53,6 +53,82 @@ public class GlobalExceptionHandeler {
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(ToyAlreadyRentedException.class)
+    public ResponseEntity<ApiErrorResponse> handleToyAlreadyRented(ToyAlreadyRentedException ex, HttpServletRequest request) {
+    ApiErrorResponse error = new ApiErrorResponse(
+        LocalDateTime.now(),
+        List.of(ex.getMessage()),
+        request.getRequestURI()
+    );
+    return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+}
+
+    @ExceptionHandler(UserNotEligibleToRentException.class)
+    public ResponseEntity<ApiErrorResponse> handleNotEligible(UserNotEligibleToRentException ex, HttpServletRequest request) {
+        ApiErrorResponse error = new ApiErrorResponse(
+            LocalDateTime.now(),
+            List.of(ex.getMessage()),
+            request.getRequestURI()
+        );
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(InsufficientPointsException.class)
+    public ResponseEntity<ApiErrorResponse> handleInsufficientPoints(InsufficientPointsException ex, HttpServletRequest request) {
+        ApiErrorResponse error = new ApiErrorResponse(
+            LocalDateTime.now(),
+            List.of(ex.getMessage()),
+            request.getRequestURI()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(RentalNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handelRentalNotFoundException(RentalNotFoundException ex, HttpServletRequest request) {
+        ApiErrorResponse error = new ApiErrorResponse(
+            LocalDateTime.now(),
+            List.of(ex.getMessage()),
+            request.getRequestURI()
+        );
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RentalAlreadyReturnedException.class)
+    public ResponseEntity<ApiErrorResponse>RentalAlreadyReturnedException(RentalAlreadyReturnedException ex, HttpServletRequest request) {
+        ApiErrorResponse error = new ApiErrorResponse(
+            LocalDateTime.now(),
+            List.of(ex.getMessage()),
+            request.getRequestURI()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CannotRentOwnToyException.class)
+    public ResponseEntity<ApiErrorResponse> handleCannotRentOwnToy(CannotRentOwnToyException ex, HttpServletRequest request) {
+        ApiErrorResponse error = new ApiErrorResponse(
+            LocalDateTime.now(),
+            List.of(ex.getMessage()),
+            request.getRequestURI()
+        );
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<ApiErrorResponse> handleUnauthorizedAccess(UnauthorizedAccessException ex, HttpServletRequest request) {
+        ApiErrorResponse error = new ApiErrorResponse(
+            LocalDateTime.now(),
+            List.of(ex.getMessage()),
+            request.getRequestURI()
+        );
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
+
+
+
+
+
 
 
 

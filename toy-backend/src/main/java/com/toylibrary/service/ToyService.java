@@ -10,4 +10,7 @@ public interface ToyService {
     List<Toy> getToysByOwner(Long ownerId);
     void deleteToy(Long toyId);
     List<Toy> getAllToys();
+    Toy updateToy(Long toyId, Toy updatedToy, Long ownerId);
+    Toy updateToy(Toy toy);
 }
+

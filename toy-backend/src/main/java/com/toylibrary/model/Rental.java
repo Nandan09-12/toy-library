@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Optional;
+
+import com.toylibrary.exception.UserNotFoundException;
 
 @Entity
 @NoArgsConstructor
@@ -20,11 +23,11 @@ public class Rental {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "renter_id", nullable = false)
     private User renter;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "toy_id", nullable = false)
     private Toy toy;
 
@@ -48,5 +51,8 @@ public class Rental {
         this.endDate = endDate;
         this.returned = false;
     }
+
+
+    
 
 }

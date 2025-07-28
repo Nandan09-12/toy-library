@@ -63,6 +63,27 @@ public class ToyServiceImpl implements ToyService {
         return toyRepository.findByOwner(user);
     }
 
+    @Override
+    @Transactional
+    public Toy updateToy(Long toyId, Toy updatedToy, Long ownerId) {
+        Toy toy = unwrapToy(toyRepository.findByIdAndOwnerId(toyId, ownerId), toyId);
+
+        toy.setName(updatedToy.getName());
+        toy.setDescription(updatedToy.getDescription());
+        toy.setPointCost(updatedToy.getPointCost());
+        // rentals untouched
+        return toyRepository.save(toy);
+    }
+
+    @Transactional
+    @Override
+    public Toy updateToy(Toy toy) {
+        return toyRepository.save(toy);
+    }
+
+
+
+
 
 
 

@@ -1,11 +1,19 @@
 package com.toylibrary;
 
+import com.toylibrary.exception.ToyNotFoundException;
 import com.toylibrary.model.MemberType;
+import com.toylibrary.model.Rental;
 import com.toylibrary.model.Role;
 import com.toylibrary.model.Toy;
 import com.toylibrary.model.User;
+import com.toylibrary.repository.RentalRepository;
 import com.toylibrary.repository.ToyRepository;
 import com.toylibrary.repository.UserRepository;
+import com.toylibrary.service.ToyService;
+import com.toylibrary.service.UserService;
+
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +27,15 @@ public class ToyBackendApplication implements CommandLineRunner {
 
 	@Autowired
 	private ToyRepository toyRepository;
+
+	@Autowired
+	private RentalRepository rentalRepository;
+
+	@Autowired
+	ToyService toyService;
+
+	@Autowired
+	UserService userService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ToyBackendApplication.class, args);
@@ -48,5 +65,30 @@ public class ToyBackendApplication implements CommandLineRunner {
 			toyRepository.save(toy2);
 			toyRepository.save(toy3);
 		}
+
+		if (rentalRepository.count() == 0) {
+            User alice = userRepository.findByEmail("alice@example.com").orElseThrow();
+            User bob = userRepository.findByEmail("bob@example.com").orElseThrow();
+
+            Toy toy1 = toyRepository.findByName("Lego Star Wars");
+            Toy toy2 = toyRepository.findByName("Barbie Dream House");
+
+            LocalDate startDate = LocalDate.now().minusDays(5);
+            LocalDate endDate = startDate.plusDays(30);
+
+            // Seed rental: Alice rents Lego
+            Rental rental1 = new Rental(alice, toy1, startDate, endDate);
+            rentalRepository.save(rental1);
+            toy1.setRented(true);
+            toyService.updateToy(toy1);
+            userService.deductPoints(alice.getId(), toy1.getPointCost());
+
+            // Seed rental: Bob rents Barbie House
+            Rental rental2 = new Rental(bob, toy2, startDate.minusDays(10), endDate.minusDays(10));
+            rentalRepository.save(rental2);
+            toy2.setRented(true);
+            toyService.updateToy(toy2);
+            userService.deductPoints(bob.getId(), toy2.getPointCost());
+        }
 	}
 }
