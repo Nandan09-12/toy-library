@@ -1,10 +1,11 @@
 package com.toylibrary.service;
 
+import com.toylibrary.dto.ToyCreateRequestDTO;
 import com.toylibrary.model.Toy;
 import java.util.List;
 
 public interface ToyService {
-    Toy createToy(Toy toy, Long ownerId);
+    Toy createToy(ToyCreateRequestDTO dto, Long ownerId);
     Toy getToyById(Long toyId);
     List<Toy> getAvailableToys();
     List<Toy> getToysByOwner(Long ownerId);

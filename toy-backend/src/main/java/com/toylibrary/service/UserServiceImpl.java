@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.toylibrary.dto.UserRegisterRequestDTO;
 import com.toylibrary.exception.MemberTypeNotApplicableException;
 import com.toylibrary.exception.UserAlreadyExistsException;
 import com.toylibrary.exception.UserNotFoundException;
@@ -24,13 +25,29 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     @Override
-    public User registerUser(User user){
-        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
-        if(existingUser.isPresent()){
-            throw new UserAlreadyExistsException("Email is already registred!");
+    public User registerUser(UserRegisterRequestDTO dto) {
+        Optional<User> existingUser = userRepository.findByEmail(dto.getEmail());
+        if (existingUser.isPresent()) {
+            throw new UserAlreadyExistsException("Email is already registered!");
         }
-        user.setUsedPoints(0);
-        return userRepository.save(user);
+
+        // Determine monthly points based on member type
+        int monthlyPoints = switch (dto.getMemberType()) {
+            case GOLD -> 800;
+            case REGULAR -> 400;
+        };
+
+        // Create a new User entity from the DTO
+        User newUser = new User(
+            dto.getName(),
+            dto.getEmail(),
+            dto.getPassword(),
+            Role.MEMBER,            
+            dto.getMemberType(),
+            monthlyPoints
+        );
+
+        return userRepository.save(newUser);
     }
 
     @Override
@@ -83,7 +100,7 @@ public class UserServiceImpl implements UserService{
         User user = unwrapUser(userRepository.findById(userId), userId);
         int newUsedPoints = user.getUsedPoints() - pointCost;
         if (newUsedPoints < 0) {
-            newUsedPoints = 0; 
+            newUsedPoints = 0; // Avoid negative values
         }
         user.setUsedPoints(newUsedPoints);
         userRepository.save(user);
@@ -110,6 +127,7 @@ public class UserServiceImpl implements UserService{
         return user.getMemberType();
     }
 
+    
 
 
 

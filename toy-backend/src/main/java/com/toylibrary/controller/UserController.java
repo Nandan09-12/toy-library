@@ -2,6 +2,7 @@ package com.toylibrary.controller;
 
 import com.toylibrary.dto.UserDTO;
 import com.toylibrary.dto.UserMapper;
+import com.toylibrary.dto.UserRegisterRequestDTO;
 import com.toylibrary.model.MemberType;
 import com.toylibrary.model.User;
 import com.toylibrary.service.UserService;
@@ -28,10 +29,10 @@ public class UserController {
         User user = userService.getUserById(id);
         return new ResponseEntity<>(UserMapper.toDTO(user), HttpStatus.OK);
     }
-    
+
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody User user) {
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserRegisterRequestDTO user) {
         User savedUser = userService.registerUser(user);
         return new ResponseEntity<>(UserMapper.toDTO(savedUser), HttpStatus.CREATED);
     }

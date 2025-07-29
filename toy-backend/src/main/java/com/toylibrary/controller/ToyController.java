@@ -2,6 +2,7 @@ package com.toylibrary.controller;
 
 import com.toylibrary.model.Toy;
 import com.toylibrary.service.ToyService;
+import com.toylibrary.dto.ToyCreateRequestDTO;
 import com.toylibrary.dto.ToyDTO;
 import com.toylibrary.dto.ToyMapper;
 
@@ -22,7 +23,7 @@ public class ToyController {
 
    
     @PostMapping("/create")
-    public ResponseEntity<ToyDTO> createToy(@RequestBody Toy toy, @RequestParam Long ownerId) {
+    public ResponseEntity<ToyDTO> createToy(@RequestBody ToyCreateRequestDTO toy, @RequestParam Long ownerId) {
         Toy createdToy = toyService.createToy(toy, ownerId);
         return new ResponseEntity<>(ToyMapper.toDTO(createdToy), HttpStatus.CREATED);
     }

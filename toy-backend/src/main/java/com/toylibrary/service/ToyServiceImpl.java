@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.toylibrary.dto.ToyCreateRequestDTO;
 import com.toylibrary.exception.ToyNotFoundException;
 import com.toylibrary.exception.UserNotAllowedToListToyException;
 import com.toylibrary.exception.UserNotFoundException;
@@ -25,14 +26,24 @@ public class ToyServiceImpl implements ToyService {
     
     @Override
     @Transactional
-    public Toy createToy(Toy toy, Long ownerId) {
+    public Toy createToy(ToyCreateRequestDTO dto, Long ownerId) {
         User owner = userService.getUserById(ownerId);
+
         if (owner.getRole() != Role.MEMBER) {
             throw new UserNotAllowedToListToyException(owner.getId());
         }
-        toy.setOwner(owner);
+
+        Toy toy = new Toy(
+            dto.getName(),
+            dto.getDescription(),
+            dto.getPointCost(),
+            owner
+        );
+
         return toyRepository.save(toy);
     }
+
+
 
     @Override
     public Toy getToyById(Long toyId) {
