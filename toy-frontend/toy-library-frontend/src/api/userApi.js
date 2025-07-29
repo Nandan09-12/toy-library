@@ -22,4 +22,10 @@ export const getUserByEmail = async (email) => {
   return response.data;
 };
 
+export const getAllUsers = async () => {
+  const response = await axios.get('http://localhost:8080/api/users');
+  return response.data;
+};
+
+
 

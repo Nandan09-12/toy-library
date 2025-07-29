@@ -11,3 +11,8 @@ export const getAvailableToys = async () => {
     throw error;
   }
 };
+
+export const getAllToys = async () => {
+  const response = await axios.get(BASE_URL);
+  return response.data;
+};

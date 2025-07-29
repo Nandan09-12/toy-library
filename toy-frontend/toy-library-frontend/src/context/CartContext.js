@@ -1,15 +1,23 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Create the context
 export const CartContext = createContext();
 
 // Provider
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  // Load from localStorage on startup
+  const [cartItems, setCartItems] = useState(() => {
+    const storedCart = localStorage.getItem('cartItems');
+    return storedCart ? JSON.parse(storedCart) : [];
+  });
+
+  // Save to localStorage when cart changes
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   // Add toy to cart
   const addToCart = (toy) => {
-    // Prevent duplicate toy in cart
     const alreadyAdded = cartItems.some(item => item.id === toy.id);
     if (!alreadyAdded) {
       setCartItems(prev => [...prev, toy]);
@@ -22,7 +30,10 @@ export const CartProvider = ({ children }) => {
   };
 
   // Clear cart after checkout
-  const clearCart = () => setCartItems([]);
+  const clearCart = () => {
+    setCartItems([]);
+    localStorage.removeItem('cartItems');
+  };
 
   return (
     <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart }}>
@@ -31,5 +42,5 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-// Easy custom hook
+// Hook for easy use
 export const useCart = () => useContext(CartContext);

@@ -17,15 +17,22 @@ const LoginPage = () => {
 
     try {
       const user = await getUserByEmail(email);
+      console.log("Logged in user object:", user);
       if (user) {
-        setUser(user); // Save in context
-        navigate('/toys'); // Redirect to listings
-      } else {
-        setError('User not found.');
-      }
-    } catch (err) {
-      setError('Invalid login. Check your email.');
+    setUser(user);
+
+    if (user.role === 'ADMIN') {
+        navigate('/admin');
+    } else {
+        navigate('/toys');
     }
+    }
+    else {
+            setError('User not found.');
+        }
+        } catch (err) {
+        setError('Invalid login. Check your email.');
+        }
   };
 
   return (
